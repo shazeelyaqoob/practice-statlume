@@ -1,0 +1,29 @@
+{
+  "name": "statlume",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@12.16.1",
+  "engines": {
+    "node": ">=22.18"
+  },
+  "scripts": {
+    "dev": "node scripts/dev.mjs",
+    "build": "pnpm --filter @statlume/web build",
+    "start": "node scripts/dev.mjs --prod",
+    "db:up": "docker compose up -d --wait",
+    "db:setup": "pnpm --filter @statlume/api db:setup",
+    "seed": "pnpm --filter @statlume/api seed",
+    "lint": "eslint . && pnpm --filter @statlume/web lint",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "typecheck": "pnpm -r typecheck"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.0",
+    "eslint": "^10.14.0",
+    "globals": "^17.0.0",
+    "prettier": "^3.9.10",
+    "typescript": "~6.0.3",
+    "typescript-eslint": "^8.72.1"
+  }
+}
