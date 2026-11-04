@@ -64,7 +64,11 @@ export function CustomersChart({
       </figcaption>
       <div className="h-64" aria-hidden="true">
         <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={data} margin={{ top: 8, right: 8, bottom: 0, left: 0 }}>
+          <BarChart
+            data={data}
+            margin={{ top: 8, right: 8, bottom: 0, left: 0 }}
+            accessibilityLayer={false}
+          >
             <CartesianGrid vertical={false} stroke={RULE} />
             <XAxis
               dataKey="label"
@@ -91,6 +95,25 @@ export function CustomersChart({
           </BarChart>
         </ResponsiveContainer>
       </div>
+      <table className="sr-only">
+        <caption>New and returning customers by {interval}</caption>
+        <thead>
+          <tr>
+            <th scope="col">Period</th>
+            <th scope="col">New</th>
+            <th scope="col">Returning</th>
+          </tr>
+        </thead>
+        <tbody>
+          {data.map((row) => (
+            <tr key={row.bucket}>
+              <th scope="row">{row.label}</th>
+              <td>{formatInt(row.newCustomers)}</td>
+              <td>{formatInt(row.returningCustomers)}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </figure>
   );
 }

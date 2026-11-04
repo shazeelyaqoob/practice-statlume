@@ -147,7 +147,7 @@ export function SalesChart({
       <div className="h-64" aria-hidden="true">
         <ResponsiveContainer width="100%" height="100%">
           {metric === 'revenue' ? (
-            <ComposedChart {...common}>
+            <ComposedChart {...common} accessibilityLayer={false}>
               {axes}
               <Area
                 type="monotone"
@@ -168,7 +168,7 @@ export function SalesChart({
               />
             </ComposedChart>
           ) : (
-            <BarChart {...common} barGap={2}>
+            <BarChart {...common} barGap={2} accessibilityLayer={false}>
               {axes}
               <Bar dataKey="current" fill={TIDE} radius={[3, 3, 0, 0]} isAnimationActive={false} />
               <Bar
@@ -181,6 +181,28 @@ export function SalesChart({
           )}
         </ResponsiveContainer>
       </div>
+      {/* The same numbers for screen readers, which skip the drawing. */}
+      <table className="sr-only">
+        <caption>
+          {title} by {interval}
+        </caption>
+        <thead>
+          <tr>
+            <th scope="col">Period</th>
+            <th scope="col">This period</th>
+            <th scope="col">Period before</th>
+          </tr>
+        </thead>
+        <tbody>
+          {data.map((row) => (
+            <tr key={row.bucket}>
+              <th scope="row">{row.label}</th>
+              <td>{fmtTotal(row.current)}</td>
+              <td>{row.previous === undefined ? 'none' : fmtTotal(row.previous)}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </figure>
   );
 }
