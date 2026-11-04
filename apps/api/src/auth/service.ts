@@ -111,6 +111,7 @@ interface TokenRow extends RowDataPacket {
   id: number;
   user_id: number;
   family_id: string;
+  revoke_reason: 'rotated' | 'logout' | 'reuse' | null;
   expired: 0 | 1;
   revoked_ago: number | null;
 }
@@ -138,7 +139,7 @@ export async function rotateRefreshToken(
   try {
     await conn.beginTransaction();
     const [rows] = await conn.query<TokenRow[]>(
-      `SELECT id, user_id, family_id,
+      `SELECT id, user_id, family_id, revoke_reason,
               expires_at <= UTC_TIMESTAMP() AS expired,
               TIMESTAMPDIFF(SECOND, revoked_at, UTC_TIMESTAMP()) AS revoked_ago
        FROM refresh_tokens WHERE token_hash = ? FOR UPDATE`,
@@ -153,19 +154,31 @@ export async function rotateRefreshToken(
       await conn.rollback();
       return { ok: false, reason: 'expired' };
     }
-    if (row.revoked_ago !== null && row.revoked_ago > REUSE_GRACE_SECONDS) {
+    if (row.revoke_reason === 'logout' || row.revoke_reason === 'reuse') {
+      // Ended on purpose. Never revive it, not even inside the grace window.
+      await conn.rollback();
+      return { ok: false, reason: 'expired' };
+    }
+    if (row.revoke_reason === 'rotated' && (row.revoked_ago ?? 0) > REUSE_GRACE_SECONDS) {
+      // A token that was already swapped for a new one is back: someone else
+      // has a copy. End every session of this user.
       await conn.query(
-        'UPDATE refresh_tokens SET revoked_at = UTC_TIMESTAMP() WHERE user_id = ? AND revoked_at IS NULL',
+        `UPDATE refresh_tokens SET revoked_at = UTC_TIMESTAMP(), revoke_reason = 'reuse'
+         WHERE user_id = ? AND revoked_at IS NULL`,
         [row.user_id],
       );
       await conn.commit();
       return { ok: false, reason: 'reused' };
     }
-    if (row.revoked_ago === null) {
-      await conn.query('UPDATE refresh_tokens SET revoked_at = UTC_TIMESTAMP() WHERE id = ?', [
-        row.id,
-      ]);
+    if (row.revoke_reason === null) {
+      await conn.query(
+        `UPDATE refresh_tokens SET revoked_at = UTC_TIMESTAMP(), revoke_reason = 'rotated'
+         WHERE id = ?`,
+        [row.id],
+      );
     }
+    // Otherwise: rotated within the last few seconds (two tabs refreshing at
+    // once). Issue another token in the same family instead of logging out.
     const [users] = await conn.query<UserRow[]>(
       'SELECT id, email, name, role, created_at FROM users WHERE id = ?',
       [row.user_id],
@@ -195,7 +208,8 @@ export async function rotateRefreshToken(
 
 export async function revokeRefreshToken(pool: Pool, token: string, pepper: string) {
   await pool.query<ResultSetHeader>(
-    'UPDATE refresh_tokens SET revoked_at = UTC_TIMESTAMP() WHERE token_hash = ? AND revoked_at IS NULL',
+    `UPDATE refresh_tokens SET revoked_at = UTC_TIMESTAMP(), revoke_reason = 'logout'
+     WHERE token_hash = ? AND revoked_at IS NULL`,
     [hashRefreshToken(token, pepper)],
   );
 }
