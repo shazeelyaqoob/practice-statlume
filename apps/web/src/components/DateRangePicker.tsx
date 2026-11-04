@@ -31,10 +31,15 @@ export function DateRangePicker({ from, to, today }: { from: string; to: string;
   const panelId = useId();
   const active = matchPreset(from, to, today);
 
-  useEffect(() => {
-    setCustomFrom(from);
-    setCustomTo(to);
-  }, [from, to]);
+  const toggle = () => {
+    if (!open) {
+      // Start the custom fields from the range currently shown.
+      setCustomFrom(from);
+      setCustomTo(to);
+      setError(null);
+    }
+    setOpen(!open);
+  };
 
   useEffect(() => {
     if (!open) return;
@@ -80,7 +85,7 @@ export function DateRangePicker({ from, to, today }: { from: string; to: string;
       <button
         ref={buttonRef}
         type="button"
-        onClick={() => setOpen((o) => !o)}
+        onClick={toggle}
         aria-expanded={open}
         aria-controls={panelId}
         aria-haspopup="dialog"

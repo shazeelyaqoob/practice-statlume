@@ -12,7 +12,8 @@ export function LogoutButton() {
       onClick={async () => {
         setBusy(true);
         await fetch('/api/auth/logout', { method: 'POST' }).catch(() => null);
-        // Full page load so no cached data from the session stays in memory.
+        // A full page load on purpose, so nothing from the old session stays in memory.
+        // eslint-disable-next-line @next/next/no-location-assign-relative-destination
         window.location.assign('/login');
       }}
     >
