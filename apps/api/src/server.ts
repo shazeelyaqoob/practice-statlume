@@ -12,8 +12,8 @@ const app = createApp({
   cookieSecure: cfg.COOKIE_SECURE,
 });
 
-const server = app.listen(cfg.PORT, () => {
-  console.log(`statlume api listening on http://localhost:${cfg.PORT}`);
+const server = app.listen(cfg.API_PORT, () => {
+  console.log(`statlume api listening on http://localhost:${cfg.API_PORT}`);
 });
 
 const shutdown = () => {

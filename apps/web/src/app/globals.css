@@ -1,0 +1,96 @@
+@import 'tailwindcss';
+
+/* Statlume brand tokens (brand book). Sodium is for alerts only. */
+@theme {
+  --color-paper: #f4f6f3;
+  --color-ink: #15191c;
+  --color-muted: #5e686d;
+  --color-rule: #15191c1a;
+  --color-rule-strong: #15191c33;
+  --color-panel: #ffffff;
+  --color-sodium: #f26b1d;
+  /* Sodium darkened for text on white so it passes WCAG AA (brand book "down" colour). */
+  --color-sodium-text: #c2410c;
+  --color-tide: #127c7a;
+  --color-tide-soft: #127c7a1f;
+  --color-pollen: #e5b92b;
+
+  --font-sans: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-archivo-display), var(--font-archivo), ui-sans-serif, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, monospace;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    @apply bg-paper text-ink font-sans antialiased;
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+  h1,
+  h2,
+  h3 {
+    @apply font-display;
+    letter-spacing: -0.02em;
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-ink);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+  ::selection {
+    background: var(--color-pollen);
+    color: var(--color-ink);
+  }
+}
+
+@utility num {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Small set of shared building blocks. Defined as utilities so they can be
+   combined with Tailwind classes and variants. */
+@utility panel {
+  @apply bg-panel rounded-lg;
+}
+@utility btn {
+  @apply inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-md border px-4 text-sm font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-60;
+}
+@utility btn-primary {
+  @apply btn border-ink bg-ink text-paper hover:bg-ink/85 active:bg-ink/75;
+}
+@utility btn-quiet {
+  @apply btn border-rule-strong bg-panel text-ink hover:border-ink active:bg-paper;
+}
+@utility field {
+  @apply min-h-11 w-full rounded-md border border-rule-strong bg-panel px-3 text-base text-ink placeholder:text-muted focus:border-ink;
+}
+@utility label {
+  @apply mb-1 block text-sm font-semibold;
+}
+@utility eyebrow {
+  @apply text-muted text-sm;
+}
+
+/* Skeleton shimmer, off for people who ask for less motion. */
+@keyframes pulse-soft {
+  50% {
+    opacity: 0.55;
+  }
+}
+.skeleton {
+  background: #15191c0f;
+  border-radius: 6px;
+  animation: pulse-soft 1.6s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .skeleton {
+    animation: none;
+  }
+  * {
+    transition-duration: 0s !important;
+  }
+}
