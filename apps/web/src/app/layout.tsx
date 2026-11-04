@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import './globals.css';
-import { archivo, archivoDisplay, plexMono } from './fonts';
+import { archivo, archivoDisplay } from './fonts';
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.SITE_URL ?? 'http://localhost:3000'),
@@ -20,10 +20,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html
-      lang="en"
-      className={`${archivo.variable} ${archivoDisplay.variable} ${plexMono.variable}`}
-    >
+    <html lang="en" className={`${archivo.variable} ${archivoDisplay.variable}`}>
       <body>{children}</body>
     </html>
   );

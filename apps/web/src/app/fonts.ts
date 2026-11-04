@@ -23,14 +23,3 @@ export const archivo = localFont({
   preload: false,
   fallback: ['Arial', 'sans-serif'],
 });
-
-export const plexMono = localFont({
-  src: [
-    { path: '../fonts/ibm-plex-mono-latin-400-normal.woff2', weight: '400', style: 'normal' },
-    { path: '../fonts/ibm-plex-mono-latin-500-normal.woff2', weight: '500', style: 'normal' },
-  ],
-  variable: '--font-plex-mono',
-  display: 'swap',
-  preload: false,
-  fallback: ['Courier New', 'monospace'],
-});

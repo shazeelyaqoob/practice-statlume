@@ -17,7 +17,6 @@
 
   --font-sans: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--font-archivo-display), var(--font-archivo), ui-sans-serif, sans-serif;
-  --font-mono: var(--font-plex-mono), ui-monospace, monospace;
 }
 
 @layer base {
@@ -46,9 +45,13 @@
   }
 }
 
+/* Numbers use Archivo with tabular figures: every digit has the same width,
+   so columns of numbers line up without a monospace font. */
 @utility num {
-  font-family: var(--font-mono);
-  font-variant-numeric: tabular-nums;
+  font-variant-numeric: tabular-nums lining-nums;
+  font-feature-settings:
+    'tnum' 1,
+    'lnum' 1;
 }
 
 /* Small set of shared building blocks. Defined as utilities so they can be
@@ -75,6 +78,74 @@
   @apply text-muted text-sm;
 }
 
+/* Report tables. Below 768px each row becomes a small stacked card, with the
+   column name taken from data-label, so nothing scrolls sideways. */
+.rtable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9375rem;
+}
+.rtable th {
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: var(--color-muted);
+  padding: 0.625rem 0.75rem;
+  border-bottom: 1px solid var(--color-rule-strong);
+  white-space: nowrap;
+}
+.rtable td {
+  padding: 0.625rem 0.75rem;
+  border-bottom: 1px solid var(--color-rule);
+  vertical-align: middle;
+}
+.rtable tbody tr:last-child td {
+  border-bottom: 0;
+}
+.rtable tbody tr:hover {
+  background: #15191c05;
+}
+.rtable .r {
+  text-align: right;
+}
+@media (max-width: 767px) {
+  .rtable thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+  .rtable tr {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.25rem 1rem;
+    padding: 0.75rem;
+    border-bottom: 1px solid var(--color-rule);
+  }
+  .rtable tbody tr:last-child {
+    border-bottom: 0;
+  }
+  .rtable td {
+    display: grid;
+    padding: 0;
+    border: 0;
+    text-align: left !important;
+  }
+  .rtable td::before {
+    content: attr(data-label);
+    font-size: 0.8125rem;
+    color: var(--color-muted);
+  }
+  .rtable td.lead {
+    grid-column: 1 / -1;
+    font-weight: 600;
+  }
+  .rtable td.lead::before {
+    content: none;
+  }
+}
+
 /* Skeleton shimmer, off for people who ask for less motion. */
 @keyframes pulse-soft {
   50% {
@@ -93,4 +164,9 @@
   * {
     transition-duration: 0s !important;
   }
+}
+
+/* Chart axis labels line up the same way as table numbers. */
+.recharts-cartesian-axis-tick-value {
+  font-variant-numeric: tabular-nums;
 }

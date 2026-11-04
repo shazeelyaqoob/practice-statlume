@@ -113,7 +113,7 @@ export function SalesChart({
         dataKey="label"
         tickLine={false}
         axisLine={{ stroke: RULE }}
-        tick={{ fill: MUTED, fontSize: 12, fontFamily: 'var(--font-mono)' }}
+        tick={{ fill: MUTED, fontSize: 12, fontFamily: 'var(--font-archivo)' }}
         minTickGap={24}
       />
       <YAxis
@@ -121,7 +121,7 @@ export function SalesChart({
         tickLine={false}
         axisLine={false}
         width={56}
-        tick={{ fill: MUTED, fontSize: 12, fontFamily: 'var(--font-mono)' }}
+        tick={{ fill: MUTED, fontSize: 12, fontFamily: 'var(--font-archivo)' }}
       />
       <Tooltip
         cursor={{ stroke: '#15191C33', fill: '#15191C0A' }}
