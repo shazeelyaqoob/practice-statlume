@@ -5,14 +5,21 @@
 export const VB_W = 1000;
 export const VB_H = 220;
 
-/** About `count` evenly spaced round numbers from 0 up past `maxValue`. */
-export function niceTicks(maxValue: number, { count = 4, integer = false } = {}): number[] {
+/**
+ * Evenly spaced round numbers from 0 to just past `maxValue`, using the
+ * smallest round step that needs no more than `maxSteps` steps, so the top
+ * of the chart is never mostly empty.
+ */
+export function niceTicks(maxValue: number, { maxSteps = 5, integer = false } = {}): number[] {
   const max = maxValue > 0 ? maxValue : 1;
-  const raw = max / count;
-  const mag = 10 ** Math.floor(Math.log10(raw));
-  let step = [1, 2, 2.5, 5, 10].map((f) => f * mag).find((s) => s * count >= max) ?? 10 * mag;
-  if (integer) step = Math.max(1, Math.ceil(step));
-  return Array.from({ length: count + 1 }, (_, i) => Math.round(i * step * 1e6) / 1e6);
+  const mag = 10 ** Math.floor(Math.log10(max / maxSteps));
+  const step =
+    [1, 2, 2.5, 5, 10, 20]
+      .map((f) => Math.round(f * mag * 1e6) / 1e6)
+      .filter((s) => !integer || (s >= 1 && Number.isInteger(s)))
+      .find((s) => Math.ceil(max / s) <= maxSteps) ?? Math.max(1, Math.ceil(max / maxSteps));
+  const steps = Math.max(1, Math.ceil(max / step));
+  return Array.from({ length: steps + 1 }, (_, i) => Math.round(i * step * 1e6) / 1e6);
 }
 
 /** Horizontal centre of bucket `i` out of `n`. */
