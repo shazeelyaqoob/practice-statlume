@@ -1,38 +1,10 @@
-'use client';
-
-import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import type { CustomersPoint, Interval } from '@statlume/shared/client';
 import { formatDayMonth, formatInt, formatMonthYear } from '@/lib/format';
+import { ChartFrame } from './ChartFrame';
+import type { HoverRow } from './ChartHover';
+import { VB_H, VB_W, niceTicks, yFor } from './scale';
 
-const TIDE = '#127C7A';
-const POLLEN = '#E5B92B';
-const MUTED = '#5E686D';
-const RULE = '#15191C14';
-
-interface Row extends CustomersPoint {
-  label: string;
-}
-
-function TooltipBox({ active, payload }: { active?: boolean; payload?: { payload: Row }[] }) {
-  const row = payload?.[0]?.payload;
-  if (!active || !row) return null;
-  return (
-    <div className="panel border-rule-strong grid gap-1 border px-3 py-2 text-sm shadow-sm">
-      <p className="font-semibold">{row.label}</p>
-      <p className="flex items-center gap-2">
-        <span className="bg-tide inline-block size-2.5 rounded-sm" aria-hidden="true" />
-        New
-        <span className="num ml-auto pl-4">{formatInt(row.newCustomers)}</span>
-      </p>
-      <p className="flex items-center gap-2">
-        <span className="bg-pollen inline-block size-2.5 rounded-sm" aria-hidden="true" />
-        Returning
-        <span className="num ml-auto pl-4">{formatInt(row.returningCustomers)}</span>
-      </p>
-    </div>
-  );
-}
-
+/** New and returning customers per bucket, stacked. Drawn on the server. */
 export function CustomersChart({
   series,
   interval,
@@ -40,12 +12,31 @@ export function CustomersChart({
   series: CustomersPoint[];
   interval: Interval;
 }) {
-  const data: Row[] = series.map((p) => ({
-    ...p,
-    label: interval === 'month' ? formatMonthYear(p.bucket) : formatDayMonth(p.bucket),
-  }));
+  const n = series.length;
+  const labels = series.map((p) =>
+    interval === 'month' ? formatMonthYear(p.bucket) : formatDayMonth(p.bucket),
+  );
+  const ticks = niceTicks(
+    Math.max(0, ...series.map((p) => p.newCustomers + p.returningCustomers)),
+    {
+      integer: true,
+    },
+  );
+  const max = ticks.at(-1) ?? 1;
   const newTotal = series.reduce((s, p) => s + p.newCustomers, 0);
   const retTotal = series.reduce((s, p) => s + p.returningCustomers, 0);
+
+  const hoverRows: HoverRow[] = series.map((p, i) => ({
+    title: labels[i],
+    items: [
+      { name: 'New', value: formatInt(p.newCustomers), color: 'tide' },
+      { name: 'Returning', value: formatInt(p.returningCustomers), color: 'pollen' },
+    ],
+  }));
+
+  const band = VB_W / n;
+  const barW = band * 0.7;
+
   return (
     <figure className="panel p-4">
       <figcaption className="text-muted mb-3 flex flex-wrap gap-x-5 gap-y-1 text-sm">
@@ -62,39 +53,28 @@ export function CustomersChart({
           across the buckets.
         </span>
       </figcaption>
-      <div className="h-64" aria-hidden="true">
-        <ResponsiveContainer width="100%" height="100%">
-          <BarChart
-            data={data}
-            margin={{ top: 8, right: 8, bottom: 0, left: 0 }}
-            accessibilityLayer={false}
-          >
-            <CartesianGrid vertical={false} stroke={RULE} />
-            <XAxis
-              dataKey="label"
-              tickLine={false}
-              axisLine={{ stroke: RULE }}
-              tick={{ fill: MUTED, fontSize: 14, fontFamily: 'var(--font-archivo)' }}
-              minTickGap={24}
-            />
-            <YAxis
-              tickLine={false}
-              axisLine={false}
-              width={48}
-              tick={{ fill: MUTED, fontSize: 14, fontFamily: 'var(--font-archivo)' }}
-            />
-            <Tooltip cursor={{ fill: '#15191C0A' }} content={<TooltipBox />} />
-            <Bar dataKey="newCustomers" stackId="c" fill={TIDE} isAnimationActive={false} />
-            <Bar
-              dataKey="returningCustomers"
-              stackId="c"
-              fill={POLLEN}
-              radius={[3, 3, 0, 0]}
-              isAnimationActive={false}
-            />
-          </BarChart>
-        </ResponsiveContainer>
-      </div>
+      <ChartFrame
+        ticks={ticks}
+        tickLabel={formatInt}
+        labels={labels}
+        axisWidth={48}
+        hoverRows={hoverRows}
+        swatch="box"
+      >
+        <g shapeRendering="crispEdges">
+          {series.map((p, i) => {
+            const x = i * band + (band - barW) / 2;
+            const yNew = yFor(p.newCustomers, max);
+            const yTop = yFor(p.newCustomers + p.returningCustomers, max);
+            return (
+              <g key={p.bucket}>
+                <rect x={x} y={yNew} width={barW} height={VB_H - yNew} fill="var(--color-tide)" />
+                <rect x={x} y={yTop} width={barW} height={yNew - yTop} fill="var(--color-pollen)" />
+              </g>
+            );
+          })}
+        </g>
+      </ChartFrame>
       <table className="sr-only">
         <caption>New and returning customers by {interval}</caption>
         <thead>
@@ -105,11 +85,11 @@ export function CustomersChart({
           </tr>
         </thead>
         <tbody>
-          {data.map((row) => (
-            <tr key={row.bucket}>
-              <th scope="row">{row.label}</th>
-              <td>{formatInt(row.newCustomers)}</td>
-              <td>{formatInt(row.returningCustomers)}</td>
+          {series.map((p, i) => (
+            <tr key={p.bucket}>
+              <th scope="row">{labels[i]}</th>
+              <td>{formatInt(p.newCustomers)}</td>
+              <td>{formatInt(p.returningCustomers)}</td>
             </tr>
           ))}
         </tbody>

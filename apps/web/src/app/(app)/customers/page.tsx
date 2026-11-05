@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import type { CustomersResponse, TopCustomerRow } from '@statlume/shared';
-import { CustomersChart } from '@/components/charts/LazyCharts';
+import { CustomersChart } from '@/components/charts/CustomersChart';
 import { ExportLink } from '@/components/ExportLink';
 import { PageHeader, Section } from '@/components/Section';
 import { EmptyState, KpiSkeleton, SectionSkeleton, TableSkeleton } from '@/components/states';

@@ -17,15 +17,15 @@ No public sign-up. The seed creates one admin and one viewer. The login page has
 
 ## 3. Stack
 
-| Layer     | Choice                                                         |
-| --------- | -------------------------------------------------------------- |
-| Monorepo  | pnpm workspaces: `apps/web`, `apps/api`, `packages/shared`     |
-| Front end | Next.js (App Router), TypeScript strict, Tailwind v4, Recharts |
-| API       | Node.js, Express 5, TypeScript strict, zod, `mysql2` (no ORM)  |
-| Database  | MySQL 8.4 LTS in Docker Compose                                |
-| Auth      | argon2, JWT access + refresh tokens in httpOnly cookies        |
-| Fonts     | Archivo 400/600/800, self-hosted (Latin subset)                |
-| CI        | GitHub Actions: format, lint, typecheck, build                 |
+| Layer     | Choice                                                                                |
+| --------- | ------------------------------------------------------------------------------------- |
+| Monorepo  | pnpm workspaces: `apps/web`, `apps/api`, `packages/shared`                            |
+| Front end | Next.js (App Router), TypeScript strict, Tailwind v4, charts drawn as server-side SVG |
+| API       | Node.js, Express 5, TypeScript strict, zod, `mysql2` (no ORM)                         |
+| Database  | MySQL 8.4 LTS in Docker Compose                                                       |
+| Auth      | argon2, JWT access + refresh tokens in httpOnly cookies                               |
+| Fonts     | Archivo 400/600/800, self-hosted (Latin subset)                                       |
+| CI        | GitHub Actions: format, lint, typecheck, build                                        |
 
 Next.js rewrites `/api/*` to the Express API so the browser only sees one origin (no CORS, cookies keep working on Vercel + Render later).
 

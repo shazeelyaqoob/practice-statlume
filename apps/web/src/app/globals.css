@@ -166,11 +166,6 @@
   }
 }
 
-/* Chart axis labels line up the same way as table numbers. */
-.recharts-cartesian-axis-tick-value {
-  font-variant-numeric: tabular-nums;
-}
-
 /* Landing page: smooth jumps to sections, and the hero chart line draws in once. */
 @media (prefers-reduced-motion: no-preference) {
   html {

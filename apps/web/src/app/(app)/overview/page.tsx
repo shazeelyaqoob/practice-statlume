@@ -7,7 +7,7 @@ import {
   type Interval,
   type SalesResponse,
 } from '@statlume/shared';
-import { SalesChart } from '@/components/charts/LazyCharts';
+import { SalesChart } from '@/components/charts/SalesChart';
 import { KpiGrid } from '@/components/KpiGrid';
 import { PageHeader, Section } from '@/components/Section';
 import { EmptyState, KpiSkeleton, SectionSkeleton } from '@/components/states';

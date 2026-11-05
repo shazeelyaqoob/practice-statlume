@@ -115,7 +115,8 @@ const COLOURS = [
 const STACK: { term: string; detail: ReactNode }[] = [
   {
     term: 'Front end',
-    detail: 'Next.js App Router with Server Components, TypeScript, Tailwind CSS and Recharts.',
+    detail:
+      'Next.js App Router with Server Components, TypeScript, Tailwind CSS. Charts are drawn as SVG on the server.',
   },
   {
     term: 'API',
