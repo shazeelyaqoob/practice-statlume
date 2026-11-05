@@ -124,6 +124,8 @@ export interface SeedOptions {
   /** Cap generated timestamps at this instant (defaults to now when endDate is today). */
   now?: Date;
   log?: boolean;
+  /** Rewrite only the store data and keep users and their sessions. */
+  keepUsers?: boolean;
 }
 
 export interface SeedResult {
@@ -302,8 +304,7 @@ export async function seed(pool: Pool, opts: SeedOptions = {}): Promise<SeedResu
       'customers',
       'product_variants',
       'products',
-      'refresh_tokens',
-      'users',
+      ...(opts.keepUsers ? [] : ['refresh_tokens', 'users']),
     ]) {
       await conn.query(`TRUNCATE TABLE ${t}`);
     }
@@ -314,7 +315,9 @@ export async function seed(pool: Pool, opts: SeedOptions = {}): Promise<SeedResu
         await conn.query(sql, [rows.slice(i, i + batch)]);
       }
     };
-    await insert('INSERT INTO users (email, name, password_hash, role, is_demo) VALUES ?', users);
+    if (!opts.keepUsers) {
+      await insert('INSERT INTO users (email, name, password_hash, role, is_demo) VALUES ?', users);
+    }
     await insert('INSERT INTO products (id, title, category, created_at) VALUES ?', products);
     await insert(
       'INSERT INTO product_variants (id, product_id, title, sku, price) VALUES ?',
