@@ -55,10 +55,10 @@ export function TimezoneDiagram() {
               fill="#FFFFFF"
               stroke="#15191C1F"
             />
-            <text x={LEFT + 8} y={t.y + 5} fontSize="13" fill="#15191C">
+            <text x={LEFT + 8} y={t.y + 5} fontSize="14" fill="#15191C">
               7 Mar
             </text>
-            <text x={RIGHT - 8} y={t.y + 5} fontSize="13" fill="#15191C" textAnchor="end">
+            <text x={RIGHT - 8} y={t.y + 5} fontSize="14" fill="#15191C" textAnchor="end">
               8 Mar
             </text>
             <line
