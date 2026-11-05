@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { Suspense } from 'react';
+import { first, type SearchParams } from '@/lib/range';
 import { Footer } from '@/components/Footer';
 import { Logo } from '@/components/Logo';
 import { LoginForm } from './LoginForm';
@@ -12,7 +12,8 @@ export const metadata: Metadata = {
   alternates: { canonical: '/login' },
 };
 
-export default function LoginPage() {
+export default async function LoginPage({ searchParams }: { searchParams: Promise<SearchParams> }) {
+  const params = await searchParams;
   return (
     <div className="mx-auto grid min-h-dvh max-w-6xl grid-rows-[1fr_auto] px-4 sm:px-6">
       <main className="grid items-center gap-10 py-10 lg:grid-cols-[minmax(0,1fr)_26rem] lg:gap-16">
@@ -47,9 +48,7 @@ export default function LoginPage() {
           </dl>
         </div>
         <div className="panel p-5 sm:p-6">
-          <Suspense fallback={null}>
-            <LoginForm />
-          </Suspense>
+          <LoginForm next={first(params.next)} reason={first(params.reason)} />
         </div>
       </main>
       <Footer />

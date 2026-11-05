@@ -1,8 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useSearchParams } from 'next/navigation';
-import type { Role } from '@statlume/shared';
+import type { Role } from '@statlume/shared/client';
 
 const REASONS: Record<string, string> = {
   expired: 'Your session ended. Please log in again.',
@@ -14,10 +13,12 @@ function safeNext(value: string | null): string {
   return value && value.startsWith('/') && !value.startsWith('//') ? value : '/overview';
 }
 
-export function LoginForm() {
-  const params = useSearchParams();
-  const next = safeNext(params.get('next'));
-  const reason = params.get('reason');
+/**
+ * The page passes the query string in from the server, so the form is part of
+ * the first HTML and does not pop in after loading (no layout shift).
+ */
+export function LoginForm({ next: rawNext, reason }: { next?: string; reason?: string }) {
+  const next = safeNext(rawNext ?? null);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState<'form' | Role | null>(null);
 

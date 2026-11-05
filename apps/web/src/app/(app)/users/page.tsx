@@ -42,7 +42,18 @@ export default async function UsersPage() {
       <PageHeader title="Users">
         Admins can manage users. Viewers can see every report and export CSV.
       </PageHeader>
-      <Section id="users" title="People with access" fallback={<TableSkeleton rows={4} />}>
+      <Section
+        id="users"
+        title="People with access"
+        fallback={
+          // Same shape as the list plus the add form, so the footer does not jump.
+          <div className="grid gap-6">
+            <div className="min-h-6" />
+            <TableSkeleton rows={3} />
+            <div className="skeleton h-96 w-full md:h-72" aria-hidden="true" />
+          </div>
+        }
+      >
         <UsersList />
       </Section>
     </>
