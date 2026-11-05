@@ -5,7 +5,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: 'Statlume',
     short_name: 'Statlume',
     description: 'Store analytics: revenue, orders, products and customers.',
-    start_url: '/',
+    start_url: '/overview',
     display: 'standalone',
     background_color: '#F4F6F3',
     theme_color: '#15191C',

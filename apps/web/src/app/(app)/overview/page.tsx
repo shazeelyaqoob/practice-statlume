@@ -27,7 +27,7 @@ async function Charts({ from, to, interval }: { from: string; to: string; interv
       <EmptyState
         title={`No orders between ${formatRange(from, to)}`}
         body="Try a wider range. The demo store has a year of history."
-        resetHref="/"
+        resetHref="/overview"
       />
     );
   }

@@ -12,7 +12,7 @@ export default function NotFound() {
       <p className="text-muted">
         This page does not exist. The numbers you want are on the overview.
       </p>
-      <Link href="/" className="btn-primary w-fit">
+      <Link href="/overview" className="btn-primary w-fit">
         Go to the overview
       </Link>
     </main>

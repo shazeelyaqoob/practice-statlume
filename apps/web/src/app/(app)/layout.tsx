@@ -26,7 +26,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
       </a>
       <aside className="border-rule hidden border-r p-4 lg:block">
         <div className="sticky top-4 grid gap-8">
-          <Link href="/" aria-label="Statlume overview" className="w-fit rounded-md">
+          <Link href="/overview" aria-label="Statlume overview" className="w-fit rounded-md">
             <Logo />
           </Link>
           <nav aria-label="Main">
@@ -45,7 +45,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
           <Suspense fallback={null}>
             <MobileMenu isAdmin={isAdmin} />
           </Suspense>
-          <Link href="/" aria-label="Statlume overview" className="rounded-md lg:hidden">
+          <Link href="/overview" aria-label="Statlume overview" className="rounded-md lg:hidden">
             <Logo />
           </Link>
           <div className="ml-auto flex items-center gap-3 max-sm:order-last max-sm:ml-0 max-sm:w-full">

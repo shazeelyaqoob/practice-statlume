@@ -20,7 +20,7 @@ export function NavLinks({
   return (
     <ul className={`grid gap-1 ${className}`}>
       {NAV.filter((n) => !n.adminOnly || isAdmin).map((n) => {
-        const active = n.href === '/' ? pathname === '/' : pathname.startsWith(n.href);
+        const active = pathname.startsWith(n.href);
         return (
           <li key={n.href}>
             <Link

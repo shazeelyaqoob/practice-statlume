@@ -27,14 +27,20 @@ function accessTokenIsFresh(token: string | undefined): boolean {
  * browser, AND rewrite this request's Cookie header so the page being rendered
  * already sees the new access token.
  */
+/** Where a logged-in visitor lands. */
+const HOME = '/overview';
+
 export async function proxy(req: NextRequest) {
   const { pathname, search } = req.nextUrl;
+  // The landing page is public and static: no session work needed.
+  if (pathname === '/') return NextResponse.next();
+
   const isLogin = pathname === '/login';
   const access = req.cookies.get(ACCESS)?.value;
   const refresh = req.cookies.get(REFRESH)?.value;
 
   if (accessTokenIsFresh(access)) {
-    return isLogin ? NextResponse.redirect(new URL('/', req.url)) : NextResponse.next();
+    return isLogin ? NextResponse.redirect(new URL(HOME, req.url)) : NextResponse.next();
   }
 
   if (refresh) {
@@ -62,7 +68,7 @@ export async function proxy(req: NextRequest) {
       const headers = new Headers(req.headers);
       headers.set('cookie', cookieHeader);
       const out = isLogin
-        ? NextResponse.redirect(new URL('/', req.url))
+        ? NextResponse.redirect(new URL(HOME, req.url))
         : NextResponse.next({ request: { headers } });
       for (const c of setCookies) out.headers.append('set-cookie', c);
       return out;
@@ -89,7 +95,7 @@ export async function proxy(req: NextRequest) {
   }
 
   if (isLogin) return NextResponse.next();
-  const next = pathname === '/' && !search ? '' : `?next=${encodeURIComponent(pathname + search)}`;
+  const next = pathname === HOME && !search ? '' : `?next=${encodeURIComponent(pathname + search)}`;
   return NextResponse.redirect(new URL(`/login${next}`, req.url));
 }
 

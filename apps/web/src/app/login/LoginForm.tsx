@@ -11,7 +11,7 @@ const REASONS: Record<string, string> = {
 
 /** Only allow redirects to paths on this site. */
 function safeNext(value: string | null): string {
-  return value && value.startsWith('/') && !value.startsWith('//') ? value : '/';
+  return value && value.startsWith('/') && !value.startsWith('//') ? value : '/overview';
 }
 
 export function LoginForm() {
