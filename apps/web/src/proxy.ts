@@ -102,6 +102,6 @@ export async function proxy(req: NextRequest) {
 export const config = {
   // Every page except API calls, Next internals and static files.
   matcher: [
-    '/((?!api|_next/static|_next/image|favicon.ico|icon.svg|apple-icon|manifest.webmanifest|robots.txt|sitemap.xml|.*\\.(?:png|svg|jpg|webp|avif|woff2)$).*)',
+    '/((?!api|_next/static|_next/image|favicon.ico|icon.svg|apple-icon|opengraph-image|manifest.webmanifest|robots.txt|sitemap.xml|.*\\.(?:png|svg|jpg|webp|avif|woff2)$).*)',
   ],
 };
