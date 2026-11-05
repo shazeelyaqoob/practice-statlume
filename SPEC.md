@@ -33,8 +33,9 @@ Next.js rewrites `/api/*` to the Express API so the browser only sees one origin
 
 | Route        | Content                                                                                                                                            |
 | ------------ | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `/` Landing  | Public product page: what each report answers, how to read the colours, the time zone rule, how it is built, one-click demo                        |
 | `/login`     | Email + password form, two demo buttons                                                                                                            |
-| `/` Overview | KPI cards (revenue, orders, AOV, returning customer rate) with change vs previous period; revenue and orders charts over time (day / week / month) |
+| `/overview`  | KPI cards (revenue, orders, AOV, returning customer rate) with change vs previous period; revenue and orders charts over time (day / week / month) |
 | `/products`  | Top products table: units, revenue, refunds, share of revenue. Sort, search, CSV                                                                   |
 | `/customers` | New vs returning over time, repeat purchase rate, top customers table, CSV                                                                         |
 | `/orders`    | Paginated order list, filter by status and channel, CSV                                                                                            |

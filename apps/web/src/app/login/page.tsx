@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
 import { Suspense } from 'react';
 import { Footer } from '@/components/Footer';
 import { Logo } from '@/components/Logo';
@@ -16,7 +17,13 @@ export default function LoginPage() {
     <div className="mx-auto grid min-h-dvh max-w-6xl grid-rows-[1fr_auto] px-4 sm:px-6">
       <main className="grid items-center gap-10 py-10 lg:grid-cols-[minmax(0,1fr)_26rem] lg:gap-16">
         <div className="max-w-xl">
-          <Logo />
+          <Link
+            href="/"
+            aria-label="Statlume home"
+            className="inline-flex min-h-11 items-center rounded-md"
+          >
+            <Logo />
+          </Link>
           <h1 className="mt-8 text-4xl leading-[1.05] font-extrabold sm:text-5xl">
             Know what sold today.
           </h1>
