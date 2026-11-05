@@ -1,4 +1,4 @@
-import { STORE_TZ } from '@statlume/shared';
+import { STORE_TZ } from '@statlume/shared/client';
 
 const usd = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
 const usdWhole = new Intl.NumberFormat('en-US', {

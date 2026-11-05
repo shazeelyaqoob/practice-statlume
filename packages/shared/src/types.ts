@@ -1,4 +1,4 @@
-import type { Role } from './schemas.ts';
+import type { Role } from './constants.ts';
 import type { Interval } from './dates.ts';
 
 export interface PublicUser {

@@ -2,7 +2,7 @@
 
 import { useRef, useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
-import { ROLES, type Role } from '@statlume/shared';
+import { ROLES, type Role } from '@statlume/shared/client';
 import { apiSend } from '@/lib/client-api';
 import { formatStoreDate } from '@/lib/format';
 import type { UserRow } from './page';

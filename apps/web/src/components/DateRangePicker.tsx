@@ -6,11 +6,11 @@ import {
   MAX_RANGE_DAYS,
   PRESETS,
   STORE_TZ_LABEL,
-  dateRangeSchema,
+  checkRange,
   matchPreset,
   presetRange,
   type PresetId,
-} from '@statlume/shared';
+} from '@statlume/shared/client';
 import { formatRange } from '@/lib/format';
 
 /**
@@ -72,12 +72,12 @@ export function DateRangePicker({ from, to, today }: { from: string; to: string;
 
   const applyCustom = (e: React.FormEvent) => {
     e.preventDefault();
-    const parsed = dateRangeSchema.safeParse({ from: customFrom, to: customTo });
-    if (!parsed.success) {
-      setError(parsed.error.issues[0]?.message ?? 'Check the dates');
+    const problem = checkRange(customFrom, customTo);
+    if (problem) {
+      setError(problem);
       return;
     }
-    go(parsed.data);
+    go({ from: customFrom, to: customTo });
   };
 
   return (

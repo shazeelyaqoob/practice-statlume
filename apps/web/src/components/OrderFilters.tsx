@@ -2,7 +2,7 @@
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useTransition } from 'react';
-import { CHANNELS, ORDER_STATUSES } from '@statlume/shared';
+import { CHANNELS, ORDER_STATUSES } from '@statlume/shared/client';
 
 /** Status and channel filters. Changing one updates the URL straight away. */
 export function OrderFilters({ status, channel }: { status?: string; channel?: string }) {

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import type { Role } from '@statlume/shared';
+import type { Role } from '@statlume/shared/client';
 
 /** One-click demo login straight from the landing page. */
 export function DemoButtons({ tone = 'light' }: { tone?: 'light' | 'dark' }) {

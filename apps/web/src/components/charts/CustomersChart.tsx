@@ -1,7 +1,7 @@
 'use client';
 
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
-import type { CustomersPoint, Interval } from '@statlume/shared';
+import type { CustomersPoint, Interval } from '@statlume/shared/client';
 import { formatDayMonth, formatInt, formatMonthYear } from '@/lib/format';
 
 const TIDE = '#127C7A';
@@ -74,14 +74,14 @@ export function CustomersChart({
               dataKey="label"
               tickLine={false}
               axisLine={{ stroke: RULE }}
-              tick={{ fill: MUTED, fontSize: 12, fontFamily: 'var(--font-archivo)' }}
+              tick={{ fill: MUTED, fontSize: 14, fontFamily: 'var(--font-archivo)' }}
               minTickGap={24}
             />
             <YAxis
               tickLine={false}
               axisLine={false}
-              width={44}
-              tick={{ fill: MUTED, fontSize: 12, fontFamily: 'var(--font-archivo)' }}
+              width={48}
+              tick={{ fill: MUTED, fontSize: 14, fontFamily: 'var(--font-archivo)' }}
             />
             <Tooltip cursor={{ fill: '#15191C0A' }} content={<TooltipBox />} />
             <Bar dataKey="newCustomers" stackId="c" fill={TIDE} isAnimationActive={false} />

@@ -1,3 +1,5 @@
+import { MAX_RANGE_DAYS } from './constants.ts';
+
 /** Store time zone. Every report groups by the store's local date. */
 export const STORE_TZ = 'America/New_York';
 export const STORE_TZ_LABEL = 'New York time (ET)';
@@ -103,4 +105,19 @@ export function matchPreset(from: string, to: string, today: string): PresetId |
 export function percentChange(current: number, previous: number): number | null {
   if (previous === 0) return null;
   return ((current - previous) / previous) * 100;
+}
+
+/**
+ * Checks a from/to pair without zod (used in the browser). Returns an error
+ * message, or null when the range is fine. The API runs the same rules
+ * through its zod schemas.
+ */
+export function checkRange(
+  from: string | null | undefined,
+  to: string | null | undefined,
+): string | null {
+  if (!from || !to || !isIsoDate(from) || !isIsoDate(to)) return 'Use the format YYYY-MM-DD';
+  if (from > to) return 'The start date must be on or before the end date';
+  if (daysInRange(from, to) > MAX_RANGE_DAYS) return `Range can be at most ${MAX_RANGE_DAYS} days`;
+  return null;
 }

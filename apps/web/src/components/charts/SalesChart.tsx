@@ -12,7 +12,7 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
-import type { Interval, SalesPoint } from '@statlume/shared';
+import type { Interval, SalesPoint } from '@statlume/shared/client';
 import {
   formatDayMonth,
   formatInt,
@@ -113,15 +113,15 @@ export function SalesChart({
         dataKey="label"
         tickLine={false}
         axisLine={{ stroke: RULE }}
-        tick={{ fill: MUTED, fontSize: 12, fontFamily: 'var(--font-archivo)' }}
+        tick={{ fill: MUTED, fontSize: 14, fontFamily: 'var(--font-archivo)' }}
         minTickGap={24}
       />
       <YAxis
         tickFormatter={axisFmt}
         tickLine={false}
         axisLine={false}
-        width={56}
-        tick={{ fill: MUTED, fontSize: 12, fontFamily: 'var(--font-archivo)' }}
+        width={64}
+        tick={{ fill: MUTED, fontSize: 14, fontFamily: 'var(--font-archivo)' }}
       />
       <Tooltip
         cursor={{ stroke: '#15191C33', fill: '#15191C0A' }}
